@@ -12,12 +12,8 @@ int main(void)
     int M = 0;
 
     int result = 0;
-    printf("햄버거 가격 K를 입력하세요: ");
-    scanf("%d", &K);
-    printf("햄버거의 개수 N를 입력하세요: ");
-    scanf("%d", &N);
-    printf("현재 당신의 지갑에 있는 돈을 입력하세요 : ");
-    scanf("%d", &M);
+    printf("햄버거 가격, 개수, 현재 지갑에 있는 돈을 입력하세요 : ");
+    scanf("%d %d %d", &K, &N, &M);
 
     result = M - (K *N);
 

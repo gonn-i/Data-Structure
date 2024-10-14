@@ -15,14 +15,11 @@ int main() {
         return 0;
     }
 
-    int place = 1; 
-
 
     while (num > 0) {
         digit = num % 10;
         printf("%d\n", digit); 
         num /= 10; 
-        place *= 10; 
     }
 
     return 0;
