@@ -29,8 +29,9 @@ void addFront(DequeType* D, element e){
   if(isFull(D)){
     printf("오버플로우입니다");
   } else {
+    D->front = (D->front - 1 + N) % N;
     D -> data[D -> front] = e;
-    D -> front = (D -> front -1 + N ) % N; 
+
   }
 }
 
