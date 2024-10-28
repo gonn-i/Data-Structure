@@ -10,8 +10,8 @@ int rMax(int* arr, int i ){
   } else {
     int max = rMax(arr, i-1);
     printf("현재 최대값 %d vs arr %d\n", max, arr[i]);
-    if(max < arr[i]){
-      max = arr[i];
+    if(max < arr[i-1]){
+      max = arr[i-1];
     }
     return max;
   }

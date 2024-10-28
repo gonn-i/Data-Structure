@@ -1,7 +1,5 @@
 // [ 문제 1 ] 양의 정수 N을 입력 받아, 1부터 N까지의 합을 구하는 프로그램을 작성하시오. 
-
 #include <stdio.h> 
-
 
 
 int recursion_sum (int n){

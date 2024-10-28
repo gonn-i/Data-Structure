@@ -31,8 +31,8 @@ QueueNode* makeNode(element e) {
     return node;
 }
 
-void insertFront (QueueType* Q, element e){
-      QueueNode* node = makeNode(e);
+void enqueue (QueueType* Q, element e){ 
+    QueueNode* node = makeNode(e);
     if (isEmpty(Q)) {
         Q->front = node; 
         Q->rear = node;
@@ -42,7 +42,7 @@ void insertFront (QueueType* Q, element e){
     }
 }
 
-void enqueue(QueueType* Q, element e) {
+void insertFront (QueueType* Q, element e) { 
     QueueNode* node = makeNode(e);
     if (isEmpty(Q)) {
         Q->front = node;
@@ -76,7 +76,7 @@ element dequeue(QueueType* Q) {
 }
 
 element deleteRear (QueueType* Q){
-      if (isEmpty(Q)) {
+    if (isEmpty(Q)) {
         return -1; 
     } 
 
@@ -85,16 +85,16 @@ element deleteRear (QueueType* Q){
     element e;
 
     if(p -> next == NULL){
-      e = p -> data;
-      init(Q);
+        e = p -> data;
+        init(Q);
     } else { // 노드가 최소 2개 이상
-      while(p -> next != NULL){
+        while(p -> next != NULL){
         q = p;  // q는 p로 (오른쪽 칸으로)
         p = p -> next; // p는 다음으로 
-      }
-      Q -> rear = q;
-      q -> next = NULL; // 안하면 다음에 삽입이 안 될수도 있음
-      e = p -> data;
+    }
+    Q -> rear = q;
+    q -> next = NULL; // 안하면 다음에 삽입이 안 될수도 있음
+    e = p -> data;
     }
     free(p);
     return e;
@@ -108,10 +108,12 @@ int main() {
 
     enqueue(&Q, 10); print(&Q);
     enqueue(&Q, 20); print(&Q);
+    printf("\n");
 
     printf("dequeue [%d] : ", dequeue(&Q)); print(&Q);
     printf("dequeue [%d] : ", dequeue(&Q)); print(&Q);
 
+    printf("\n");
     enqueue(&Q, 30); print(&Q);
     insertFront(&Q, 40); print(&Q);
 

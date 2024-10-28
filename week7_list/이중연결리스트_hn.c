@@ -12,7 +12,6 @@ typedef struct DListNode {
 typedef struct {
     DListNode* H; // 더미 헤드 노드
     DListNode* T; // 더미 테일 노드
-    int size;     // 리스트의 크기
 } DListType;
 
 // 노드 생성 함수
@@ -29,12 +28,24 @@ void init(DListType* DL) {
     DL->T = makeNode(0); // 더미 테일 노드
     DL->H->next = DL->T; // 헤드가 테일을 가리킴
     DL->T->prev = DL->H; // 테일이 헤드를 가리킴
-    DL->size = 0;        // 초기 사이즈는 0
+}
+
+// 리스트 크기 구하는 함수 (size 변수 사용하지 않음)
+int getSize(DListType* DL) {
+    int count = 0;
+    DListNode* p = DL->H->next; // 헤드 다음 노드부터 시작
+    while (p != DL->T) { // 테일 노드에 도달할 때까지
+        count++;
+        p = p->next; // 다음 노드로 이동
+    }
+    return count; // 총 노드 수 반환
 }
 
 // 삽입 함수
 void insert(DListType* DL, int pos, Element e) {
-    if (pos < 1 || pos > DL->size + 1) {
+
+    int size = getSize(DL);
+    if (pos < 1 || pos > size + 1) {
         printf("Invalid position!\n");
         return;
     }
@@ -50,12 +61,12 @@ void insert(DListType* DL, int pos, Element e) {
     p->next->prev = node;    // p의 다음 노드의 이전 노드를 새 노드로 설정
     p->next = node;          // p의 다음 노드를 새 노드로 설정
 
-    DL->size++; // 사이즈 증가
 }
 
 // 삭제 함수
 Element delete(DListType* DL, int pos) {
-    if (pos < 1 || pos > DL->size) {
+    int size = getSize(DL);
+    if (pos < 1 || pos > size) {
         printf("Invalid position!\n");
         return '\0'; // 잘못된 위치인 경우
     }
@@ -69,7 +80,6 @@ Element delete(DListType* DL, int pos) {
     p->prev->next = p->next; // 이전 노드의 다음을 삭제할 노드의 다음으로 설정
     p->next->prev = p->prev; // 다음 노드의 이전을 삭제할 노드의 이전으로 설정
     free(p); // 메모리 해제
-    DL->size--; // 사이즈 감소
     return e; // 삭제한 데이터 반환
 }
 

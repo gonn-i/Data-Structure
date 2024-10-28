@@ -66,7 +66,6 @@ void sortedPush (stackType *s, element a) {
     sortedPush(s,a);
     push(s,temp);
   }
-
 }
 
 int main() {
@@ -82,7 +81,4 @@ int main() {
 
   return 0;
 }
-
-char s2[16] = {'H','\0'};
-char s2[16] = {'H'};
 

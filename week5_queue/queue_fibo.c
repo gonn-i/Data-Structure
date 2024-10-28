@@ -22,14 +22,14 @@ int isEmpty (QueueType* Q){
 }
 
 int isFull (QueueType* Q){
-  return Q-> front == (Q -> rear +1) % N;
+  return Q-> front == (Q -> rear +1  % N);
 }
 
 void enqueue (QueueType* Q, element e){
   if(isFull(Q)){
     printf("오버플로우입니다");
   } else {
-    Q -> rear = (Q -> rear +1 ) % N; 
+    Q -> rear = (Q ->rear +1% N )  ;
     Q -> data[Q -> rear] = e;
   }
 }
@@ -63,14 +63,14 @@ void print (QueueType* Q){
   printf("\n");
 }
 
-void fibo ( int n ){
+void fibo ( int n){
   QueueType Q;
   init(&Q);
 
-  enqueue(&Q,0);
+  enqueue(&Q,1);
   enqueue(&Q,1);
 
-  for( int i =2; i <=n; i++){
+  for( int i =1; i <= n; i++){
     element e1 = dequeue(&Q);
     element e2 = peek(&Q);
 
@@ -78,9 +78,10 @@ void fibo ( int n ){
     enqueue(&Q, e1+e2);
   }
 
-  while(!isEmpty(&Q)){
+  while(isEmpty(&Q)){
     printf(" %d", dequeue(&Q));
   }
+
   printf("\n");
 }
 

@@ -70,7 +70,7 @@ element getFront (DequeType* D){
     return -1;
   }
 
-  return D -> data[(D -> front +1) % N];
+return D->data[(D->front +1 ) % N];
 }
 
 element getRear (DequeType* D){   // peek of stack
@@ -79,7 +79,7 @@ element getRear (DequeType* D){   // peek of stack
     return -1;
   }
 
-  return D -> data[D -> rear];
+return D->data[D->rear]; 
 }
 
 void print (DequeType* D){
@@ -99,17 +99,17 @@ int main () {
   srand(time(NULL));
 
   for(int i =0; i <7; i++){
-    addRear(&D, rand() % 26 + 65);
+    addRear(&D, rand() % 26 + 'A');
   }
   print(&D);
 
   for(int i=0; i <3; i++){
-    printf("[%c]", deleteFront(&D));
+    printf("delete_Front: [%c]\n\n", deleteFront(&D));
   }
   printf("\n\n");
   print(&D);
 
-  printf("[%c]\n\n", getFront(&D));
+  printf("peek_Front: [%c]\n\n", getFront(&D));
   print(&D);
 
 
@@ -119,12 +119,12 @@ int main () {
   print(&D);
 
   for(int i=0; i <3; i++){
-    printf("[%c]", deleteRear(&D));
+    printf("delete_rear: [%c]\n\n", deleteRear(&D));
   }
   printf("\n\n");
   print(&D);
 
-  printf("[%c]\n\n", getRear(&D));
+  printf("peek_rear: [%c]\n\n", getRear(&D));
   print(&D);
 
 }
