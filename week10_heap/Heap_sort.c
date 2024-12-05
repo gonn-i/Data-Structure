@@ -2,7 +2,7 @@
 // 2) 외부노드 -> 완전 이진트리 ok 
 // 3) 외부노드 -> 비교조건 ok
 // 3) heapify() 를 통해서, 작게 트리를 만들어서 최대/최소를 올리고 -> 상위 트리에서 또 비교하면서 올림
-
+// 정적으로 배열을 넣고, 이제 그걸 힙 정렬 
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -33,6 +33,7 @@ void heapify(int A[], int i, int n) {
     }
 }
 
+// 내부 노드 힙속성 만족 
 void buildHeap(int A[], int n) {
     for (int i = n / 2; i >= 1; i--) {
         heapify(A, i, n);
@@ -57,18 +58,15 @@ void heapSort(int A[], int n) {
         A[i] = A[1];
         A[1] = tmp;
 
-
         heapify(A, 1, i);
         printHeap(A,n);
     }
 }
 
 
-
 int main() {
-    int A[] = { 4, 1, 3, 2, 16, 9, 10, 14, 8, 7};  // 첫 번째 요소는 0 (사용하지 않음)
+    int A[] = { 0, 4, 1, 3, 2, 16, 9, 10, 14, 8, 7};  // 첫 번째 요소는 0 (사용하지 않음)
     int n = sizeof(A) / sizeof(A[0]);
-
 
     heapSort(A, n);
     printHeap(A, n);

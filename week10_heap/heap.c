@@ -1,3 +1,4 @@
+// 우선순위큐
 #include <stdio.h>
 #include <stdlib.h>
 #define N 100
@@ -12,18 +13,20 @@ void init(HeapType* H) {
   H->heapSize = 0;
 }
 
+// 추가한 노드 부모와 비교하여 위로 올리기 
 void upHeap(HeapType* H) {
   int i = H->heapSize;
-  element key = H->heap[i];
+  element key = H->heap[i]; // 삽입한 노드
 
   // 부모와 비교하여 부모가 작으면 자식과 위치를 바꿈
   while (i > 1 && key > H->heap[i / 2]) {
-    H->heap[i] = H->heap[i / 2];
+    H->heap[i] = H->heap[i / 2]; // 부모 노드를 아래로 내리기 
     i /= 2;
   }
-  H->heap[i] = key;  // key를 적절한 위치에 넣음
+  H->heap[i] = key;  // 적당한 위치에 key 넣기
 }
 
+// 힙트리에 노드 추가 (제일 끝단에 추가)
 void insertItem(HeapType* H, element key) {
   H->heapSize++;
   H->heap[H->heapSize] = key;
