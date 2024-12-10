@@ -1,31 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define N 10
 #define TRUE 1 
 #define FALSE 0
+#define INF 100
+
+int dist[N];  // 최소 가중치를 기록하는 배열
+char selectedVertices[N];  // 선택된 정점 순서를 기록
+int totalWeight = 0;       // MST의 총 가중치
 
 typedef struct Edge {
-    char v1, v2;
-    int weight;
-    struct Edge* next;
+    char v1, v2;       // 간선이 연결하는 두 정점
+    int weight;        // 간선의 가중치
+    struct Edge* next; // 다음 간선을 가리키는 포인터
 } Edge;
 
 typedef struct AdjVertex {
-    char aName;
-    struct AdjVertex* next;
+    char aName;        // 인접 정점의 이름
+    struct AdjVertex* next; // 다음 인접 정점을 가리키는 포인터
 } AdjVertex;
 
 typedef struct Vertex {
-    char vName;
-    int isVisit;
-    AdjVertex* aHead;
-    struct Vertex* next;
+    char vName;        // 정점의 이름
+    int isVisit;       // 정점의 방문 여부
+    AdjVertex* aHead;  // 인접 정점들을 가리키는 포인터
+    struct Vertex* next; // 다음 정점을 가리키는 포인터
 } Vertex;
 
 typedef struct {
-    Vertex* vHead;
-    Edge* eHead;
-    int vCount, eCount;
+    Vertex* vHead;     // 정점들을 가리키는 포인터
+    Edge* eHead;       // 간선들을 가리키는 포인터
+    int vCount, eCount; // 정점과 간선의 개수
 } GraphType;
 
 void initGraph(GraphType* G) {
@@ -122,18 +128,68 @@ void printGraph(GraphType* G) {
     }
 }
 
-void rDFS(GraphType* G, char vName) {
+Vertex* findMin(GraphType* G) {
+    Vertex* v = NULL;
+    int min = INF;
+
+    for (Vertex* p = G->vHead; p != NULL; p = p->next) {
+        if (dist[p->vName - 'A'] < min && p->isVisit == FALSE) {
+            min = dist[p->vName - 'A'];
+            v = p;
+        }
+    }
+    return v;
+}
+
+void prim(GraphType* G, char vName) {
+    for (int i = 0; i < N; i++) {
+        dist[i] = INF;
+    }
+
     Vertex* V = findVertex(G, vName);
-    if (V == NULL || V->isVisit == TRUE) {
-        return;
+    dist[vName - 'A'] = 0;
+    int selectedCount = 0;
+
+    for (int i = 0; i < G->vCount; i++) {
+        V = findMin(G);
+        if (V == NULL) break;
+
+        V->isVisit = TRUE;
+        selectedVertices[selectedCount++] = V->vName;
+
+        for (AdjVertex* A = V->aHead; A != NULL; A = A->next) {
+            Vertex* w = findVertex(G, A->aName);
+            if (w == NULL || w->isVisit == TRUE) continue;
+
+            Edge* E = G->eHead;
+            while (E != NULL) {
+                if ((E->v1 == V->vName && E->v2 == A->aName) || (E->v1 == A->aName && E->v2 == V->vName)) {
+                    if (dist[A->aName - 'A'] > E->weight) {
+                        dist[A->aName - 'A'] = E->weight;
+                    }
+                }
+                E = E->next;
+            }
+        }
+
+        for (Edge* E = G->eHead; E != NULL; E = E->next) {
+            if (E->v1 == V->vName || E->v2 == V->vName) {
+                totalWeight += dist[V->vName - 'A'];
+                break;
+            }
+        }
+    for (int i = 0; i < G -> vCount; i++) {
+            printf("%5d", dist[i]);
+        }
+        printf("\n");
     }
 
-    V->isVisit = TRUE;
-    printf("[%c]", V->vName);
 
-    for (AdjVertex* a = V->aHead; a != NULL; a = a->next) {
-        rDFS(G, a->aName);
+    printf("\nMST 순서: ");
+    for (int i = 0; i < selectedCount; i++) {
+        printf("%c ", selectedVertices[i]);
     }
+    printf("\n총 가중치 합: %d\n", totalWeight);
 }
 
 int main() {
@@ -151,16 +207,13 @@ int main() {
     insertEdge(&G, 'A', 'D', 12);
     insertEdge(&G, 'B', 'C', 10);
     insertEdge(&G, 'B', 'D', 15);
-    insertEdge(&G, 'C', 'G', 16);
+    insertEdge(&G, 'C', 'E', 16);
     insertEdge(&G, 'D', 'E', 17);
     insertEdge(&G, 'D', 'F', 37);
-    insertEdge(&G, 'E', 'G', 14);
     insertEdge(&G, 'E', 'F', 19);
-    insertEdge(&G, 'F', 'G', 42);
 
     printGraph(&G);
-    printf("\nDepth-First Search starting from 'B':\n");
-    rDFS(&G, 'B');
+    prim(&G, 'A');
 
     return 0;
 }

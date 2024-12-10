@@ -6,25 +6,25 @@
 #define FALSE 0
 #define INF 100
 
-int dist[N]; 
-int vertices[N];
+int dist[N]; // 최단 거리 배열
+int vertices[N]; // Union-Find 배열
 
 typedef struct Edge {
-    char v1, v2;
-    int weight;
-    struct Edge* next;
+    char v1, v2; // 간선이 연결하는 두 정점
+    int weight;  // 간선 가중치
+    struct Edge* next; // 다음 간선 포인터
 } Edge;
 
 typedef struct AdjVertex {
-    char aName;
-    struct AdjVertex* next;
+    char aName; // 인접 정점 이름
+    struct AdjVertex* next; // 다음 인접 정점 포인터
 } AdjVertex;
 
 typedef struct Vertex {
-    char vName;
-    int isVisit;
-    AdjVertex* aHead;
-    struct Vertex* next;
+    char vName; // 정점 이름
+    int isVisit; // 방문 여부
+    AdjVertex* aHead; // 인접 정점 리스트 헤드
+    struct Vertex* next; // 다음 정점 포인터
 } Vertex;
 
 typedef struct {
@@ -33,14 +33,16 @@ typedef struct {
     int vCount, eCount;
 } GraphType;
 
+// 그래프 초기화 함수
 void initGraph(GraphType* G) {
     G->vHead = NULL;
     G->eHead = NULL;
     G->vCount = G->eCount = 0;
 
-    for(int i =0; i< N; i++){
+    // dist 및 vertices 배열 초기화
+    for (int i = 0; i < N; i++) {
         dist[i] = INF;
-        vertices[i] = -1;
+        vertices[i] = -1; // Union-Find 부모 노드 초기화
     }
 }
 
@@ -53,6 +55,7 @@ void makeVertex(GraphType* G, char vName) {
 
     G->vCount++;
 
+    // 정점 리스트 추가 
     if (G->vHead == NULL) {
         G->vHead = V;
     } else {
@@ -64,6 +67,7 @@ void makeVertex(GraphType* G, char vName) {
     }
 }
 
+// 인접 정점 추가 
 void makeAdjVertex(Vertex* v, char aName) {
     AdjVertex* a = (AdjVertex*)malloc(sizeof(AdjVertex));
     a->aName = aName;
@@ -80,6 +84,7 @@ void makeAdjVertex(Vertex* v, char aName) {
     }
 }
 
+// 정점 탐색
 Vertex* findVertex(GraphType* G, char vName) {
     Vertex* p = G->vHead;
     while (p != NULL) {
@@ -100,6 +105,7 @@ void insertEdge(GraphType* G, char v1, char v2, int weight) {
 
     G->eCount++;
 
+    // 간선 리스트 추가 
     if (G->eHead == NULL) {
         G->eHead = e;
     } else {
@@ -110,6 +116,7 @@ void insertEdge(GraphType* G, char v1, char v2, int weight) {
         p->next = e;
     }
 
+    // 인접 정점 추가 
     Vertex* v = findVertex(G, v1);
     if (v != NULL) {
         makeAdjVertex(v, v2);
@@ -132,18 +139,17 @@ void printGraph(GraphType* G) {
     }
 }
 
-void rDFS(GraphType* G, char vName) {
-    Vertex* V = findVertex(G, vName);
-    if (V == NULL || V->isVisit == TRUE) {
-        return;
+// Union-Find: Find 함수
+int Find (int vNum){
+    while(vertices[vNum] != -1){
+        vNum = vertices[vNum];
     }
+    return vNum;
+}
 
-    V->isVisit = TRUE;
-    printf("[%c]", V->vName);
-
-    for (AdjVertex* a = V->aHead; a != NULL; a = a->next) {
-        rDFS(G, a->aName);
-    }
+// Union-Find: Union 함수
+void Union (int vNum1, int vNum2){
+    vertices[vNum2] = vNum1;
 }
 
 Vertex* findMin (GraphType* G){
@@ -158,20 +164,20 @@ Vertex* findMin (GraphType* G){
     }
     return v;
 }
-
+// 먼저 정렬해서 가중치순으로 정렬
 void selectionSort (GraphType* G, Edge* edges[]) {
-  Edge* e = G->eHead;
-  for (int i = 0; i < G->eCount; i++) {
-    edges[i] = e;
-    e = e->next;
-  }
+    Edge* e = G -> eHead;
+    for (int i = 0; i < G -> eCount; i++) {
+        edges[i] = e;
+        e = e->next;
+    }
 
-  for (int i = 0; i < G->eCount; i++) {
-    int min = i;
-    for (int j = i + 1; j < G->eCount; j++) {
-        if (edges[j]->weight < edges[min]->weight) {
-        min = j;
-      }
+    for (int i = 0; i < G->eCount; i++) {
+        int min = i;
+        for (int j = i + 1; j < G->eCount; j++) {
+            if (edges[j]->weight < edges[min]->weight) {
+                min = j;
+        }
     }
         e = edges[min];
         edges[min] = edges[i];
@@ -184,52 +190,53 @@ void selectionSort (GraphType* G, Edge* edges[]) {
     printf("\n");
 }
 
-int Find (int vNum){
-    while(vertices[vNum] != -1){
-        vNum = vertices[vNum];
-    }
-    return vNum;
-}
 
-void Union (int vNum1, int vNum2){
-    vertices[vNum2] = vNum1;
-}
-
-// 이거 사진보고 따라하기
 void dijkstra(GraphType* G, char vName) {
-    Vertex* v = NULL;
-    AdjVertex* a = NULL;
+    Vertex* v = NULL; // 현재 처리 중인 정점
+    AdjVertex* a = NULL; // 인접 정점 리스트를 순회하기 위한 포인터
 
-    // dist 배열 초기화: 모든 값을 INF로 설정
+    // 1. dist 배열 초기화: 모든 정점의 거리를 무한대로 설정
     for (int i = 0; i < G->vCount; i++) {
         dist[i] = INF;
     }
 
-    // 출발점의 거리는 0으로 설정
-    dist[vName - 65] = 0;
+    // 2. 출발점의 거리를 0으로 설정
+    dist[vName - 'A'] = 0; // 정점 이름을 인덱스로 변환 ('A' -> 0, 'B' -> 1, ...)
 
-    // Dijkstra 알고리즘 실행
+    // 3. 다익스트라 알고리즘 실행
     for (int i = 0; i < G->vCount; i++) {
-        // 최소값을 가진 정점을 선택
+        // (1) 방문하지 않은 정점 중에서 가장 작은 거리 값을 가진 정점을 찾음
         v = findMin(G);
-        if (v == NULL) break;  // 더 이상 방문할 정점이 없으면 종료
+        if (v == NULL) break; // 모든 정점이 방문되었으면 종료
 
-        v->isVisit = TRUE;
+        v->isVisit = TRUE; // 선택된 정점을 방문 처리
 
-        // 선택된 정점과 인접한 정점들에 대해 거리 갱신
+        // (2) 선택된 정점의 인접 정점들에 대해 거리 갱신
         for (a = v->aHead; a != NULL; a = a->next) {
-            Vertex* w = findVertex(G, a->aName);
+            Vertex* w = findVertex(G, a->aName); // 인접 정점 탐색
 
-            if (w != NULL && w->isVisit == FALSE && 
-                dist[v->vName - 65] + a->weight < dist[a->aName - 65]) {
-                dist[a->aName - 65] = dist[v->vName - 65] + a->weight;
+            // 방문하지 않은 정점이고, 기존 거리보다 새로운 경로가 더 짧은 경우
+            if (w != NULL && w->isVisit == FALSE) {
+                Edge* edge = G->eHead; // 그래프의 엣지 리스트에서 가중치를 찾아야 함
+                while (edge != NULL) {
+                    if ((edge->v1 == v->vName && edge->v2 == a->aName) || 
+                        (edge->v1 == a->aName && edge->v2 == v->vName)) {
+                        // 가중치를 찾아 거리 계산
+                        int newDist = dist[v->vName - 'A'] + edge->weight;
+                        if (newDist < dist[a->aName - 'A']) {
+                            dist[a->aName - 'A'] = newDist; // 거리 갱신
+                        }
+                        break;
+                    }
+                    edge = edge->next;
+                }
             }
         }
     }
 
-    // 최단 거리 출력
+    // 4. 최단 거리 출력
     for (int i = 0; i < G->vCount; i++) {
-        printf("Vertex %c : %d\n", 65 + i, dist[i]);
+        printf("Vertex %c : %d\n", 'A' + i, dist[i]);
     }
 }
 
@@ -285,8 +292,6 @@ int main() {
     selectionSort(&G, edges);
     kruskal(&G, edges);
 
-    // printGraph(&G);
-    // prim(&G, 'A');
 
     return 0;
 } 
