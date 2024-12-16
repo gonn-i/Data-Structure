@@ -22,11 +22,9 @@ typedef struct Vertex { // 각 노드를 의미
     struct Vertex* next; // 그래프의 정점 리스트 전체를 연결
 } Vertex;
 
-typedef struct { // 그래프 전체 
+typedef struct GraphType{ // 그래프 전체 
     Vertex* vHead; // 첫번째 정점의 포인터
 } GraphType;
-
-
 
 void initGraph(GraphType* G) {
     G->vHead = NULL;
@@ -34,17 +32,17 @@ void initGraph(GraphType* G) {
 
 void makeVertex(GraphType* G, char vName) {
     Vertex* V = (Vertex*) malloc(sizeof(Vertex));
-    V-> vName = vName;
-    V-> aHead = NULL;
-    V-> next = NULL;
+    V-> vName = vName; // 숫자 넣어주기 
+    V-> next = NULL; // 다음 노드 
+    V-> aHead = NULL;  // 다음 adjvertex
     V -> isVisit = FALSE;
 
     if (G->vHead == NULL) {
         G->vHead = V; // 그래프에 아무것도 없으면, 그래프 첫 노드는 V (새 노드)
     } else {
         Vertex* p = G->vHead; // 아니라면 젤 앞에 있는애 불러와서 
-        while (p->next != NULL) { // 그 뒤에 연결 
-            p = p->next;
+        while (p -> next != NULL) { // 그 뒤에 연결 
+            p =  p-> next;
         }
         p -> next = V;
     }
@@ -62,11 +60,11 @@ void makeAdjVertex(Vertex* v, char aName) {
         while (p->next != NULL) { // 근데 그 앞에 있는 돌멩이의 젤 뒤에 연결 
             p = p->next;
         }
-        p->next = a; // 연결!!
+        p->next = a; // 연결!! (마찬가지로 젤 뒤에 넣어주기)
     }
 }
 
-Vertex* findVertex(GraphType* G, char vName) {
+Vertex* findVertex(GraphType* G, char vName) { // 돌멩이 찾기
     Vertex* p = G->vHead;
     while (p != NULL) {
         if (p-> vName == vName) {
@@ -77,10 +75,10 @@ Vertex* findVertex(GraphType* G, char vName) {
     return NULL;
 }
 
-void insertEdge(GraphType* G, char v1, char v2) {
+void insertEdge(GraphType* G, char v1, char v2) { 
     Vertex* V = findVertex(G, v1);
     if (V != NULL) { // 노드가 있을떄만 서로 연결 
-        makeAdjVertex(V, v2);
+        makeAdjVertex(V, v2); // 돌멩이 찾아서 v2 연결 고리 연결 
     } else {
         printf("Vertex %c not found!\n", v1);
     }

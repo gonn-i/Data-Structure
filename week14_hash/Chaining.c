@@ -24,7 +24,7 @@ void insertItem(HashType* HT, int key) {
 	int b = hashFn(key);
 	HashType* node = (HashType*)malloc(sizeof(HashType));
 	node->key = key;
-	node->next = HT[b].next;  // 원래 기준 HT[key]가 손잡고 있던 친구 넘겨주기
+	node->next = HT[b].next;  // 원래 기준 HT[key]가 손잡고 있던 친구 넘겨주기 (앞에 끼워주는거)
 	HT[b].next = node; // if key 충돌이 생겨도 앞에 끼워주기
 }
 
@@ -41,7 +41,7 @@ int findItem(HashType* HT, int key) {
 int deleteItem(HashType* HT, int key) {
 	int b = hashFn(key);
 	int count = 0;
-	HashType* p = &HT[b]; // 기준이 되는 버킷 
+	HashType* p = &HT[b]; // 기준이 되는 버킷 (prev)
 	HashType* q; 
 
 	while (p->next) {

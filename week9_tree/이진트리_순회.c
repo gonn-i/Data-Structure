@@ -91,7 +91,7 @@ int getLevel(TreeNode* root, Telement target, int level) {
   if (root->data == target) return level; // 현재 노드가 타겟 노드면 현재 레벨 반환
 
   int leftLevel = getLevel(root->left, target, level + 1);   // 왼쪽 서브트리에서 타겟 노드 검색
-  if (leftLevel != 0) return leftLevel; // 왼쪽에서 찾았다면 레벨 반환
+  if (leftLevel != 0) return leftLevel; // (왼쪽에서 찾은 경우) 왼쪽으로 탐색한 레벨 반환
 
   return getLevel(root->right, target, level + 1);  // 오른쪽 서브트리에서 타겟 노드 검색
 }
@@ -105,6 +105,7 @@ int main () {
   TreeNode* N3 = makeNode('C', N6 , NULL );
   TreeNode* N1 = makeNode('A', N2 , N3);
 
+  
   preOrder(N1);  printf("\b\b\b   "); printf("\n"); // 전위순회 VLR
   inOrder(N1);   printf("\b\b\b   "); printf("\n"); // 중위순회 LVR
   postOrder(N1);   printf("\b\b\b   "); printf("\n"); // 후위순회 LRV
@@ -114,6 +115,7 @@ int main () {
   printf("Leaf count : %d\n", leafCount(N1)); //자식 노드가 없는 노드
   printf("isExternal : %d\n",  isExternal(N6)); //특정 노드가 리프 노드인지 여부를 판별
   printf("Height: %d\n", height(N1));
+  printf("level: %d\n", getLevel(N1, 'D', 1));
 
   treeReverse(N1); inOrder(N1);   printf("\b\b\b   "); printf("\n"); // 트리 좌우대칭 시키기
   return 0;

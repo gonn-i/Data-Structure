@@ -13,9 +13,9 @@ void heapify(int A[], int i, int n) {
 
     // 왼쪽 자식이 있고, 부모보다 큰 경우
     if (left < n && A[left] > A[i]) {
-        max = left;
+        max = left; // 젤 큰 값의 인덱스 hㅌ    
     } else {
-        max = i;
+        max = i; // 걍 부모가 젤 큼
     }
 
     // 오른쪽 자식이 있고, 현재 max보다 큰 경우
@@ -54,18 +54,19 @@ void heapSort(int A[], int n) {
     printf("----------------------------------------\n");
 
     for (int i = n - 1; i > 1; i--) {
+        //: 최댓값(A[1])을 배열 끝(A[i])으로 이동
         int tmp = A[i];
         A[i] = A[1];
         A[1] = tmp;
 
-        heapify(A, 1, i);
+        heapify(A, 1, i); // 여기에서는 젤 큰 값을 앞으로 뺴기 위한 
         printHeap(A,n);
     }
 }
 
 
 int main() {
-    int A[] = { 0, 4, 1, 3, 2, 16, 9, 10, 14, 8, 7};  // 첫 번째 요소는 0 (사용하지 않음)
+    int A[] = { 0, 4, 1, 3, 2, 16, 9, 10, 14, 8, 7} ;  // 첫 번째 요소는 0 (사용하지 않음)
     int n = sizeof(A) / sizeof(A[0]);
 
     heapSort(A, n);

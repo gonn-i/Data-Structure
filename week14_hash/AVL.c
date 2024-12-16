@@ -107,7 +107,6 @@ void display(TreeNode *root, int key){
     printf("[Insert %d] : ", key);
     preOrder(root);
     printf("\n");
-
 }
 
 
@@ -119,6 +118,7 @@ int main() {
         root = insertNode(root, data[i]);
         display(root, data[i]);
     }
+
 
     printf("\n");
 

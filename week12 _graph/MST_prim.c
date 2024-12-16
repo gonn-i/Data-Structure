@@ -98,23 +98,24 @@ void insertEdge(GraphType* G, char v1, char v2, int weight) {
 
     if (G->eHead == NULL) {
         G->eHead = e;
-    } else {
+    } else { // 일단 edge 먼저 연결 
         Edge* p = G->eHead;
         while (p->next != NULL) {
             p = p->next;
         }
         p->next = e;
     }
-
-    Vertex* v = findVertex(G, v1);
-    if (v != NULL) {
-        makeAdjVertex(v, v2);
+    // 다음으로 연결고리 
+    Vertex* V = findVertex(G, v1);
+    if (V != NULL) {
+        makeAdjVertex(V, v2);
     } else {
         printf("Vertex %c not found!\n", v1);
     }
 }
 
 void printGraph(GraphType* G) {
+    // 돌멩이 + 연결고리 출력 
     for (Vertex* p = G->vHead; p != NULL; p = p->next) {
         printf("[%c]", p->vName);
         for (AdjVertex* q = p->aHead; q != NULL; q = q->next) {
@@ -123,19 +124,21 @@ void printGraph(GraphType* G) {
         printf("\n");
     }
     printf("\nEdges:\n");
+    // edge 출력 
     for (Edge* e = G->eHead; e != NULL; e = e->next) {
         printf("[%c, %c] : [%d]\n", e->v1, e->v2, e->weight);
     }
 }
 
+// 인접 
 Vertex* findMin(GraphType* G) {
     Vertex* v = NULL;
     int min = INF;
 
-    for (Vertex* p = G->vHead; p != NULL; p = p->next) {
-        if (dist[p->vName - 'A'] < min && p->isVisit == FALSE) {
+    for (Vertex* p = G->vHead; p != NULL; p = p->next) { // 쭉 NULL 일떄까지 탐색
+        if (dist[p->vName - 'A'] < min && p->isVisit == FALSE) { // 돌멩이 하나씩 순회하면서 가까운순으로 하나씩
             min = dist[p->vName - 'A'];
-            v = p;
+            v = p; //   p가 v 로 반환
         }
     }
     return v;
@@ -146,25 +149,26 @@ void prim(GraphType* G, char vName) {
         dist[i] = INF;
     }
 
-    Vertex* V = findVertex(G, vName);
+    Vertex* V = findVertex(G, vName); // 인자로 받은 값인 돌멩이 찾기
     dist[vName - 'A'] = 0;
     int selectedCount = 0;
 
+
     for (int i = 0; i < G->vCount; i++) {
         V = findMin(G);
-        if (V == NULL) break;
+        if (V == NULL) break; 
 
         V->isVisit = TRUE;
-        selectedVertices[selectedCount++] = V->vName;
+        selectedVertices[selectedCount++] = V->vName; // 최소신장트리에 넣어줌
 
-        for (AdjVertex* A = V->aHead; A != NULL; A = A->next) {
+        for (AdjVertex* A = V->aHead; A != NULL; A = A->next) { // 뽑힌 돌멩이에 대한 인접 연결고리 다 탐색
             Vertex* w = findVertex(G, A->aName);
             if (w == NULL || w->isVisit == TRUE) continue;
 
-            Edge* E = G->eHead;
+            Edge* E = G->eHead; // edge 순회
             while (E != NULL) {
-                if ((E->v1 == V->vName && E->v2 == A->aName) || (E->v1 == A->aName && E->v2 == V->vName)) {
-                    if (dist[A->aName - 'A'] > E->weight) {
+                if ((E -> v1 == V->vName && E -> v2 == A->aName) || (E->v1 == A->aName && E->v2 == V->vName)) {
+                    if (dist[A->aName - 'A'] > E->weight) { // 전에 있던 가중치가 더 크면 새로운 가중치 넣기
                         dist[A->aName - 'A'] = E->weight;
                     }
                 }
@@ -172,7 +176,8 @@ void prim(GraphType* G, char vName) {
             }
         }
 
-        for (Edge* E = G->eHead; E != NULL; E = E->next) {
+        // 다 돌면서 가중치합 구하기 
+        for (Edge* E = G->eHead; E != NULL; E = E->next) { 
             if (E->v1 == V->vName || E->v2 == V->vName) {
                 totalWeight += dist[V->vName - 'A'];
                 break;

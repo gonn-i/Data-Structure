@@ -64,7 +64,6 @@ void rDFS (GraphType* G, int s) {
       rDFS(G, t); // s와 연결된거 싹다 출력 
     }
   }
-
 }
 
 int main () {
@@ -75,8 +74,8 @@ int main () {
   printf(" 정점의 수: ");
   scanf("%d", &n);
   printf("\n");
-
   setVertexCount(&G, n);
+
   insertEdge(&G, 0, 1); insertEdge(&G, 0, 2);
   insertEdge(&G, 1, 3); insertEdge(&G, 2, 3);
   insertEdge(&G, 2, 4); insertEdge(&G, 3, 5);

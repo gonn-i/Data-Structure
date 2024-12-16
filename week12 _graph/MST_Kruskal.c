@@ -139,39 +139,17 @@ void printGraph(GraphType* G) {
     }
 }
 
-// Union-Find: Find 함수
-int Find (int vNum){
-    while(vertices[vNum] != -1){
-        vNum = vertices[vNum];
-    }
-    return vNum;
-}
 
-// Union-Find: Union 함수
-void Union (int vNum1, int vNum2){
-    vertices[vNum2] = vNum1;
-}
-
-Vertex* findMin (GraphType* G){
-    Vertex* v = NULL;
-    int min = INF;
-
-    for(Vertex* p = G-> vHead; p != NULL; p = p -> next){
-        if(dist[p -> vName - 65] < min && p -> isVisit == FALSE){
-        min = dist[p -> vName- 65];
-        v = p; 
-    }
-    }
-    return v;
-}
 // 먼저 정렬해서 가중치순으로 정렬
 void selectionSort (GraphType* G, Edge* edges[]) {
     Edge* e = G -> eHead;
-    for (int i = 0; i < G -> eCount; i++) {
+
+    for (int i = 0; i < G -> eCount; i++) { // 원래 있던 edge 그대로 담음 
         edges[i] = e;
         e = e->next;
     }
 
+    // edge 정렬 
     for (int i = 0; i < G->eCount; i++) {
         int min = i;
         for (int j = i + 1; j < G->eCount; j++) {
@@ -240,7 +218,18 @@ void dijkstra(GraphType* G, char vName) {
     }
 }
 
+// Union-Find: Union 함수
+void Union (int vNum1, int vNum2){
+    vertices[vNum2] = vNum1;
+}
 
+// Union-Find: Find 함수
+int Find (int vNum){
+    while(vertices[vNum] != -1){
+        vNum = vertices[vNum];
+    }
+    return vNum;
+}
 
 // Union find 기반 
 void kruskal (GraphType* G, Edge* edges[]){
@@ -249,8 +238,8 @@ void kruskal (GraphType* G, Edge* edges[]){
     int vNum1, vNum2;
     Edge* e;
 
-    while(eCnt < G -> vCount -1){
-        e = edges[i];
+    while(eCnt < G -> vCount -1){ // eCount == 전체 노드개수 -1
+        e = edges[i]; // edge 작은거부터 
 
         vNum1 = Find(e -> v1 - 65);
         vNum2 = Find(e -> v2 - 65);
@@ -263,7 +252,6 @@ void kruskal (GraphType* G, Edge* edges[]){
         }
         i++;
     }
-
 }
 
 int main() {

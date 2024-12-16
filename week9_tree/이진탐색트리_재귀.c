@@ -34,6 +34,7 @@ void inOrder(TreeNode* root) {
     inOrder(root -> right);
   }
 }
+
 // 현재 노드보다 작은 값 중 가장 작은 값을 가지는 노드
 TreeNode* successor (TreeNode* root){
   while( root -> left != NULL ){
@@ -46,6 +47,7 @@ TreeNode* deleteNode (TreeNode* root , element target){
   if(!root) return NULL;
   if(target < root -> data) root -> left  = deleteNode(root -> left, target); // 반환값 주워다가 연결 
   else if(target > root -> data) root -> right = deleteNode(root -> right, target);  // 반환값 주워다가 연결 
+  // 반환값 찾은 경우 
   else {
     if(root -> left == NULL) {
       TreeNode* temp = root -> right;
@@ -58,9 +60,9 @@ TreeNode* deleteNode (TreeNode* root , element target){
       return temp;
     } 
     else {
-      TreeNode* temp = successor(root -> right);
+      TreeNode* temp = successor(root -> right); // 오른쪽 서브 트리의 제일 왼쪽
       root -> data = temp -> data; // 대신 연결
-      root -> right = deleteNode(root -> right , temp -> data); // 그 계승자 데이터 삭제한걸로 오른쪽을 바꿔주기
+      root -> right = deleteNode(root -> right , temp -> data); // 계승자의 자식을 연결해주고 (오른쪽 자식 또는 NULL), 계승자 위로 올려줬으니 삭제
     }
   } 
   return root;

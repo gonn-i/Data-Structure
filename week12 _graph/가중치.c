@@ -24,7 +24,7 @@ typedef struct Vertex { // 정점 (돌멩이))
     struct Vertex* next;
 } Vertex;
 
-typedef struct {
+typedef struct GraphType{
     Vertex* vHead; // 정점리스트
     Edge* eHead;  // 간선리스트 (가중치 + 어디에 연결)
     int vCount, eCount;

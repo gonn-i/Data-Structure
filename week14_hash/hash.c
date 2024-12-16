@@ -16,11 +16,11 @@ typedef struct
 void init (HashTable *HT){
   for(int i = 0; i < M; i++){
     HT -> B[i].key = 0;
-    HT -> B[i].probeCount = 0;
+    HT -> B[i].probeCount = 0; // 구조체 형태 기억할것 HT -> B[i].어쩌구 🔥
   }
 }
 
-int isEmpty (HashTable *HT, int b) { // 특정 버킷이 비었는지 판별
+int isEmpty (HashTable *HT, int b) { // 특정 버킷이 비었는지 판별 0이면 빈거!!
   return HT -> B[b].key == 0; 
 }
 
@@ -39,9 +39,8 @@ void insertItem(HashTable *HT, int key){
   for(int i =0; i < M; i++){
     count++;
    int b = (hashVal + i )%  M; // 선형 조사법 (다음 슬롯을 순차적으로 탐색 + i )
-    // int b = (hashVal + i * i )% 13 ; // 이차조사법 ( 다음 슬롯을 i * i 로 탐색)
+    // int b = (hashVal + i * i )% M ; // 이차조사법 ( 다음 슬롯을 i * i 로 탐색)
     // int b = (hashVal + i * hashFn2(key)) % M;  // 이중 해싱법 
-
 
     if(isEmpty(HT,b)){ // 만약 빈자리라면 넣고 , or not 반복문 계속 타기 
       HT -> B[b].key = key;

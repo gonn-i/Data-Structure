@@ -6,8 +6,8 @@
 int sorted[N]; // 전역 배열으로 sorted 선언
 
 void merge(int A[], int left, int mid, int right) {
-    int i = left; // 시작인덱스 
-    int j = mid + 1; // 시작인덱스 
+    int i = left; // 시작인덱스  (왼쪽)
+    int j = mid + 1; // 시작인덱스 (오른쪽)
     int k = left; // 정렬된 결과를 임시로 저장할 새로운 배열의 왼쪽임 
 
     while (i <= mid && j <= right) { // 왼쪽 부분배열과 오른쪽 부분배열에 처리할것이 있는 경우
